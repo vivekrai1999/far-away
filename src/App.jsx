@@ -14,10 +14,14 @@ function App() {
   function handleChecked(id){
     setItems((items)=>items.map(item=>item.id===id?{...item, packed: !item.packed}: item))
   }
+  function handleClear(){
+    const confirmend = window.confirm("Delete all items?")
+    if(confirmend) setItems([])
+  }
   return <div className="app">
     <Logo/>
     <Form onAddItem={handleAddItem}/>
-    <PackingList items={items} onDelete={handleDelete} onChecked={handleChecked}/>
+    <PackingList items={items} onDelete={handleDelete} onChecked={handleChecked} onClear={handleClear}/>
     <Stats items={items}/>
   </div>
 }
@@ -61,7 +65,7 @@ function Form({onAddItem}){
   </div>
 }
 
-function PackingList({items, onDelete, onChecked}){
+function PackingList({items, onDelete, onChecked, onClear}){
   const [sortBy, setSortBy] = useState('input')
   let sortedItems;
   if(sortBy==='input') sortedItems = items;
@@ -77,8 +81,10 @@ function PackingList({items, onDelete, onChecked}){
         <option value="description">sort by description</option>
         <option value="packed">sort by packed status</option>
       </select>
+      <button onClick={onClear}>Clear List</button>
     </div>
   </div>
+  
 }
 
 function Item({item, onDelete, onChecked}){
